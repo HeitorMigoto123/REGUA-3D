@@ -1,7 +1,8 @@
 {
-  "name": "REGUA 3D",
-  "description": "An AI-powered measurement tool that estimates the dimensions (width, height, depth) of objects using visual context from your camera.",
   "requestFramePermissions": [
-    "camera"
-  ]
+    "camera",
+    "microphone"
+  ],
+  "name": "",
+  "description": ""
 }
