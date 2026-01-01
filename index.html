@@ -4,23 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini Measure AI</title>
+    <title>Regua 3D IA - Medição Inteligente</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       body {
-        background-color: #0f172a;
+        background-color: #020617;
         color: #f8fafc;
         margin: 0;
         overflow-x: hidden;
       }
-      .camera-pulse {
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      #root:empty {
+        display: flex;
+        align-items: center;
+        justify-center;
+        height: 100vh;
+      }
+      #root:empty::after {
+        content: "Carregando interface inteligente...";
+        font-family: sans-serif;
+        color: #94a3b8;
+        font-size: 0.875rem;
+        letter-spacing: 0.1em;
+        animation: pulse 2s infinite;
       }
       @keyframes pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.5; }
       }
     </style>
+    <!-- Polyfill para process.env para evitar erros em hosts estáticos como GitHub Pages -->
+    <script>
+      window.process = { 
+        env: { 
+          API_KEY: "" // A chave será injetada pelo ambiente ou definida aqui se necessário
+        } 
+      };
+    </script>
 <script type="importmap">
 {
   "imports": {
@@ -35,7 +54,7 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Ponto de entrada do aplicativo -->
+    <!-- Ponto de entrada com extensão explícita -->
     <script type="module" src="./index.tsx"></script>
 </body>
 </html>

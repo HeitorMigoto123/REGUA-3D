@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import { Camera } from './components/Camera';
-import { ResultDisplay } from './components/ResultDisplay';
-import { analyzeDimensions } from './services/geminiService';
-import { AppStatus, Dimensions, MeasurementMode } from './types';
+import { Camera } from './components/Camera.tsx';
+import { ResultDisplay } from './components/ResultDisplay.tsx';
+import { analyzeDimensions } from './services/geminiService.ts';
+import { AppStatus, Dimensions, MeasurementMode } from './types.ts';
 
 const App: React.FC = () => {
   const [status, setStatus] = useState<AppStatus>('idle');
@@ -20,7 +20,7 @@ const App: React.FC = () => {
       setStatus('result');
     } catch (error) {
       console.error(error);
-      setErrorMessage("Erro ao processar imagem. Tente novamente.");
+      setErrorMessage("Erro ao processar imagem. Verifique sua conexão e tente novamente.");
       setStatus('error');
     }
   };
@@ -49,7 +49,6 @@ const App: React.FC = () => {
       <main className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[60vh]">
         {status === 'idle' && (
           <div className="w-full text-center space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            {/* Mode Selector */}
             <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-800 w-full max-w-xs mx-auto shadow-inner">
                <button 
                 onClick={() => setMode('object')}
@@ -59,14 +58,16 @@ const App: React.FC = () => {
                </button>
                <button 
                 onClick={() => setMode('person')}
-                className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all ${mode === 'person' ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all ${mode === 'person' ? 'bg-red-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
                >
                  👤 Pessoas
                </button>
             </div>
 
             <div className="bg-slate-900/50 p-12 rounded-[2.5rem] border border-slate-800 flex flex-col items-center max-w-md mx-auto shadow-2xl">
-               <div className="w-24 h-24 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-3xl flex items-center justify-center mb-6 shadow-2xl transition-transform hover:rotate-6">
+               <div className={`w-24 h-24 bg-gradient-to-br rounded-3xl flex items-center justify-center mb-6 shadow-2xl transition-transform hover:rotate-6 ${
+                 mode === 'object' ? 'from-cyan-500 to-blue-600' : 'from-red-500 to-orange-600'
+               }`}>
                   {mode === 'object' ? (
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
                   ) : (
@@ -83,7 +84,9 @@ const App: React.FC = () => {
                </p>
                <button
                 onClick={() => setStatus('camera')}
-                className="w-full bg-white text-slate-950 font-bold py-4 px-8 rounded-2xl hover:bg-cyan-50 transition-colors shadow-lg active:scale-95"
+                className={`w-full text-slate-950 font-bold py-4 px-8 rounded-2xl transition-colors shadow-lg active:scale-95 ${
+                  mode === 'object' ? 'bg-white hover:bg-cyan-50' : 'bg-white hover:bg-red-50'
+                }`}
               >
                 Ativar Câmera
               </button>
@@ -97,9 +100,13 @@ const App: React.FC = () => {
             
             {status === 'analyzing' && (
               <div className="text-center space-y-4 animate-pulse">
-                <div className="inline-flex items-center gap-3 px-6 py-3 bg-cyan-500/10 border border-cyan-500/30 rounded-full">
-                  <div className="w-4 h-4 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
-                  <span className="text-cyan-400 font-semibold">
+                <div className={`inline-flex items-center gap-3 px-6 py-3 bg-slate-900 border rounded-full ${
+                  mode === 'person' ? 'border-red-500/30' : 'border-cyan-500/30'
+                }`}>
+                  <div className={`w-4 h-4 border-2 border-t-transparent rounded-full animate-spin ${
+                    mode === 'person' ? 'border-red-400' : 'border-cyan-400'
+                  }`} />
+                  <span className={mode === 'person' ? 'text-red-400 font-semibold' : 'text-cyan-400 font-semibold'}>
                     {mode === 'person' ? 'Calculando estatura...' : 'Analisando proporções espaciais...'}
                   </span>
                 </div>
